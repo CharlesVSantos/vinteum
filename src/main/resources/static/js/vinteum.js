@@ -368,11 +368,15 @@ function mostrar(estado) {
 
     if (estado.acabou && estado.resultado) {
         mostrarResultado(estado.resultado);
+        console.log("Resultado:", estado.resultado);
+        console.log("Partida finalizada:", estado.acabou);
+        console.log("Contado:", contado);
         if (!contado) {
             contado = true;
             if (estado.resultado.includes('venceu') &&
                 estado.resultado.includes('Jogador')) {
                 placar.vitorias++;
+                console.log("Vitórias contabilizadas:", placar.vitorias);
             }
             else if (estado.resultado.includes('perdeu')) {
                 placar.derrotas++;
@@ -381,6 +385,7 @@ function mostrar(estado) {
                 placar.empates++;
             }
             el('vitorias').textContent = placar.vitorias;
+            console.log("Elemento de vitórias:", el('vitorias'));
             el('derrotas').textContent = placar.derrotas;
             el('empates').textContent = placar.empates;
         }
@@ -405,7 +410,9 @@ async function acao(caminho, recolher = false) {
         const r = await fetch('/api/' + caminho, { method: 'POST' });
         if (!r.ok) throw new Error(r.status);
         const estado = await r.json();
-        if (recolher) contado = false;
+        if (recolher) {
+            contado = false;
+        }
         await aplicar(estado, recolher);
         ocupado = false;
         mostrar(estado);
@@ -432,7 +439,7 @@ async function iniciar() {
         el('estilo').appendChild(opcao);
     }
     const estado = await rEstado.json();
-    contado = estado.acabou;
+    contado = true;
     ocupado = true;
     await aplicar(estado);
     ocupado = false;
