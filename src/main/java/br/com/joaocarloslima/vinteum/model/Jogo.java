@@ -1,69 +1,77 @@
-
 package br.com.joaocarloslima.vinteum.model;
 
 public class Jogo {
 
-    private Monte monte = new Monte();
-    private Jogador jogador = new Jogador();
-    private Computador computador = new Computador();
+    private Monte monte;
+    private Jogador jogador;
+    private Mesa mesa;
 
     public Jogo() {
+        monte = new Monte();
         monte.embaralhar();
+
+        jogador = new Jogador();
+        mesa = new Mesa();
+
+        jogador.receberCarta(monte.virar());
+        jogador.receberCarta(monte.virar());
+
+        mesa.receberCarta(monte.virar());
+        mesa.receberCarta(monte.virar());
     }
 
-    public Carta distribuirCartaParaJogador(Jogador jogador) {
+    public void pedirCarta() {
+        if (!acabou()) {
+            jogador.receberCarta(monte.virar());
 
-        if (jogador.parou()) {
-            return null;
+            if (jogador.getPontos() >= 21) {
+                jogador.parar();
+                mesa.jogar(monte);
+            }
         }
+    }
 
-        Carta carta = monte.virar();
-        jogador.receberCarta(carta);
-
-        return carta;
+    public void parar() {
+        jogador.parar();
+        mesa.jogar(monte);
     }
 
     public boolean acabou() {
-
-        boolean jogadorTerminou =
-                jogador.parou() || jogador.getPontos() > 21;
-
-        boolean computadorTerminou =
-                computador.parou() || computador.getPontos() > 21;
-
-        return jogadorTerminou && computadorTerminou;
+        return jogador.parou() && mesa.parou();
     }
 
     public String resultado() {
+        if (!acabou()) {
+            return "Em andamento";
+        }
 
         int pontosJogador = jogador.getPontos();
-        int pontosComputador = computador.getPontos();
+        int pontosMesa = mesa.getPontos();
 
         if (pontosJogador > 21) {
-            return "Você perdeu";
+            return "Jogador perdeu";
         }
 
-        if (pontosComputador > 21) {
-            return "Você ganhou";
+        if (pontosMesa > 21 || pontosJogador > pontosMesa) {
+            return "Jogador venceu";
         }
 
-        if (pontosJogador > pontosComputador) {
-            return "Você ganhou";
-        }
-
-        if (pontosComputador > pontosJogador) {
-            return "Você perdeu";
+        if (pontosJogador < pontosMesa) {
+            return "Mesa venceu";
         }
 
         return "Empate";
     }
 
-    public Computador getComputador() {
-        return computador;
+    public Monte getMonte() {
+        return monte;
     }
 
     public Jogador getJogador() {
         return jogador;
     }
-}
 
+    public Mesa getMesa() {
+        return mesa;
+    }
+}

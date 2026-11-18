@@ -370,9 +370,16 @@ function mostrar(estado) {
         mostrarResultado(estado.resultado);
         if (!contado) {
             contado = true;
-            if (estado.resultado.includes('ganhou')) placar.vitorias++;
-            else if (estado.resultado.includes('perdeu')) placar.derrotas++;
-            else placar.empates++;
+            if (estado.resultado.includes('venceu') &&
+                estado.resultado.includes('Jogador')) {
+                placar.vitorias++;
+            }
+            else if (estado.resultado.includes('perdeu')) {
+                placar.derrotas++;
+            }
+            else {
+                placar.empates++;
+            }
             el('vitorias').textContent = placar.vitorias;
             el('derrotas').textContent = placar.derrotas;
             el('empates').textContent = placar.empates;

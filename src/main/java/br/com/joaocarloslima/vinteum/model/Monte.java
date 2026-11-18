@@ -1,4 +1,3 @@
-
 package br.com.joaocarloslima.vinteum.model;
 
 import java.util.Collections;
@@ -23,5 +22,9 @@ public class Monte {
 
     public Carta virar() {
         return cartas.remove(0);
+    }
+
+    public int getQuantidade() {
+        return cartas.size();
     }
 }
