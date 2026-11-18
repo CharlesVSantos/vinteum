@@ -14,6 +14,8 @@ public class Mesa extends Participante {
                 parar();
             }
         }
+
+        parar();
     }
 
     public EstiloDeJogo getEstilo() {
